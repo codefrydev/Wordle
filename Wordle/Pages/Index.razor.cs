@@ -1,8 +1,7 @@
 ﻿
-using Microsoft.AspNetCore.Components; 
-using Microsoft.JSInterop; 
+using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using Wordle.Model;
-using Wordle.Shared; 
 
 namespace Wordle.Pages
 {
@@ -30,15 +29,12 @@ namespace Wordle.Pages
             }
         }
         [JSInvokable]
-        public async Task OnArrowKeyPressed(string key)
+        public void OnArrowKeyPressed(string key)
         {
             if (win) return;
-            var stackToList = currentword.Reverse().ToList();
-            Console.WriteLine(Config.CurrentIndex);
+            var stackToList = currentword.Reverse().ToList(); 
             if (key == "Enter")
-            {
-                Console.WriteLine($"Before Enter {string.Concat(stackToList)}");
-                Console.WriteLine($"Current Word {Config.WordToFind}");
+            { 
                 if (currentword.Count >= 5 && ValidWord(string.Concat(stackToList)))
                 {
                     if(string.Concat(stackToList)==Config.WordToFind)
@@ -49,23 +45,19 @@ namespace Wordle.Pages
                     }
                     Config.CurrentIndex++;
                     currentword = new();
-                }
-                Console.WriteLine($"After Enter {string.Concat(stackToList)}");
+                } 
                 StateHasChanged();
                 return;
             }
             if (stackToList.Count > 0)
-            {
-                Console.WriteLine(string.Concat(stackToList));
+            { 
             }
             if (Config.CurrentIndex >= list.Count)
-            {
-                Console.WriteLine("Game Over");
+            { 
                 return;
             }
             if (key == "Backspace")
-            {
-                Console.WriteLine(string.Concat(stackToList)); 
+            { 
                 if (currentword.Count > 0)
                 {
                     list[Config.CurrentIndex][currentword.Count - 1].PlaceHolder = ' ';
@@ -76,12 +68,10 @@ namespace Wordle.Pages
             }
             
             if (key.Length == 1 && currentword.Count < 5)
-            {
-                Console.WriteLine("currentword.Count != 5");
+            { 
                 var c = key.ToLower()[0];
                 if (alphabet[0].Contains(c) || alphabet[1].Contains(c) || alphabet[2].Contains(c))
-                {
-                    Console.WriteLine($"{c} is pushed Into Stack");
+                { 
                     currentword.Push(c);
                     list[Config.CurrentIndex][currentword.Count-1].PlaceHolder = c; 
                 }

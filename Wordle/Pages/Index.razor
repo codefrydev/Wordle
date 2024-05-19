@@ -1,9 +1,10 @@
 ﻿@page "/"  
 <div class="container" style="background-color:transparent">
     <div class="content" style="background-color:transparent"> 
-        <MudPaper Class="d-flex align-content-space-between flex-wrap flex-grow-1 gap-4" MaxWidth="608px" Height="100vh" Elevation="0" Style="background-color:transparent">
-            <MudPaper Class="mud-theme-primary" Width="100%" Height="64px" >
-
+        <MudPaper Class="d-flex align-content-space-between flex-wrap flex-grow-1 gap-4" MaxWidth="608px" Height="95vh" Elevation="0" Style="background-color:transparent">
+            <MudPaper Width="100%" Height="32px" Elevation="0" Style="background-color:transparent" >
+                <MudIconButton Icon="@Icons.Material.Filled.QuestionMark" 
+                Color="Color.Warning" OnClick="HelpDialog" />
             </MudPaper>
             <MudPaper Class="d-flex flex-column flex-grow-1 gap-1" Elevation="0" Width="100%"> 
                 @foreach (var item in list)
@@ -15,7 +16,7 @@
                                 Class="containerWord" 
                                 Width="64px" 
                                 Height="64px"
-                                      Style="@($"border-width:2px;border-radius:10px;border-color:black;background-color:{point.GetBackGroundColor()};")">
+                                      Style="@($"border-width:1px;border-radius:10px;border-color:black;background-color:{point.GetBackGroundColor()};")">
                                 <MudText Typo="Typo.h4" Style="@($"color:{point.GetTextColor()}")">
                                     <strong>@point.PlaceHolderToString()</strong>
                                 </MudText>  
@@ -30,8 +31,10 @@
                     {
                         <MudPaper Class="flex-grow-1 containerWord" Height="48px"
                                   @onclick="@(()=>OnArrowKeyPressed(item.ToString()))"
-                                  Style="background-color:darkgray">
-                            @item.ToString().ToUpper()
+                                  Style="background-color:darkgray"> 
+                            <MudText Typo="Typo.h5">
+                                <strong>@item.ToString().ToUpper() </strong>
+                            </MudText>
                         </MudPaper>
                     } 
                 </MudPaper>
@@ -41,8 +44,10 @@
                     {
                         <MudPaper Class="flex-grow-1 containerWord" Height="48px"
                                   @onclick="@(()=>OnArrowKeyPressed(item.ToString()))" 
-                                  Style="background-color:darkgray">
-                            @item.ToString().ToUpper()
+                                  Style="background-color:darkgray"> 
+                            <MudText Typo="Typo.h5">
+                                <strong>@item.ToString().ToUpper() </strong>
+                            </MudText>
                         </MudPaper>
                     }
                     <MudPaper Class="flex-grow-1" Height="48px" Elevation="0" Style="color:transparent" />
@@ -50,21 +55,28 @@
                 <MudPaper Class="d-flex justify-center flex-grow-1 gap-1 ma-1" Elevation="0">
                     <MudPaper Class="flex-grow-1 containerWord" MinWidth="48px" Height="48px"
                               @onclick="@(()=>OnArrowKeyPressed("Enter"))"
-                              Style="background-color:darkgray">
-                        Enter
+                              Style="background-color:darkgray"> 
+                        <MudText Typo="Typo.h5">
+                            <strong>Enter </strong>
+                        </MudText>
                     </MudPaper>
                     @foreach (var item in alphabet[2])
                     {
                         <MudPaper Class="flex-grow-1 containerWord" Height="48px"
                                   @onclick="@(()=>OnArrowKeyPressed(item.ToString()))"
                                   Style="background-color:darkgray">
-                            @item.ToString().ToUpper()
+                            
+                            <MudText Typo="Typo.h5">
+                                <strong>@item.ToString().ToUpper() </strong>
+                            </MudText>
                         </MudPaper>
                     }
                     <MudPaper Class="flex-grow-1 containerWord" MinWidth="48px" Height="48px"
                               @onclick="@(()=>OnArrowKeyPressed("Backspace"))"
-                              Style="background-color:darkgray">
-                        &lt;-
+                              Style="background-color:darkgray"> 
+                        <MudText Typo="Typo.h5">
+                            <strong>&lt;- </strong>
+                        </MudText>
                     </MudPaper>
                 </MudPaper>
             </MudPaper>
@@ -116,7 +128,7 @@
         </MudButton>
     </DialogContent> 
 </MudDialog>
-
+@inject IDialogService DialogService
 @code {
     private bool visible;
     private int rating;
@@ -132,4 +144,13 @@
         FullWidth = true ,
         CloseButton = true
     };
+    private void HelpDialog()
+    {
+        var options = new DialogOptions 
+        { 
+            CloseOnEscapeKey = true,
+            CloseButton = true
+        };
+        DialogService.Show<HowToPlay>("HOW TO PLAY", options);
+    }
 }

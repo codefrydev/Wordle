@@ -1,6 +1,4 @@
-﻿using Wordle.Shared;
-
-namespace Wordle.Model
+﻿namespace Wordle.Model
 {
     public class Cell
     {
