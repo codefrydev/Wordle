@@ -1,0 +1,97 @@
+﻿@page "/"  
+<div class="container" style="background-color:transparent">
+    <div class="content" style="background-color:transparent"> 
+        <MudPaper Class="d-flex align-content-space-between flex-wrap flex-grow-1 gap-4" MaxWidth="608px" Height="100vh" Elevation="0" Style="background-color:transparent">
+            <MudPaper Class="mud-theme-primary" Width="100%" Height="64px" >
+
+            </MudPaper>
+            <MudPaper Class="d-flex flex-column flex-grow-1 gap-1" Elevation="0" Width="100%"> 
+                @foreach (var item in list)
+                {
+                    <MudPaper Class="d-flex flex-row justify-center flex-grow-1 gap-1" Elevation="0">
+                        @foreach (var point in item)
+                        {
+                            <MudPaper 
+                                Class="containerWord" 
+                                Width="64px" 
+                                Height="64px"
+                                      Style="@($"border-width:2px;border-radius:10px;border-color:black;background-color:{Config.GetBackGroundColor(point,item)};")">
+                                <MudText Typo="Typo.h4" Style="color:white">
+                                    <strong>@point</strong>
+                                </MudText>  
+                            </MudPaper>
+                        } 
+                    </MudPaper>
+                } 
+            </MudPaper>
+            <MudPaper Class="gap-1" Width="100%" Elevation="0" Style="color:transparent">
+                <MudPaper Class="d-flex justify-center flex-grow-1 gap-1 ma-1" Elevation="0">
+                    @foreach (var item in alphabet[0])
+                    {
+                        <MudPaper Class="mud-theme-primary flex-grow-1 containerWord" Height="48px"
+                                  @onclick="@(()=>OnArrowKeyPressed(item.ToString()))">
+                            @item.ToString().ToUpper()
+                        </MudPaper>
+                    } 
+                </MudPaper>
+                <MudPaper Class="d-flex justify-center flex-grow-1 gap-1 ma-1" Elevation="0">
+                    <MudPaper Class="flex-grow-1" Height="48px" Elevation="0" Style="color:transparent"/>
+                    @foreach (var item in alphabet[1])
+                    {
+                        <MudPaper Class="mud-theme-primary flex-grow-1 containerWord" Height="48px"
+                                  @onclick="@(()=>OnArrowKeyPressed(item.ToString()))">
+                            @item.ToString().ToUpper()
+                        </MudPaper>
+                    }
+                    <MudPaper Class="flex-grow-1" Height="48px" Elevation="0" Style="color:transparent" />
+                </MudPaper>
+                <MudPaper Class="d-flex justify-center flex-grow-1 gap-1 ma-1" Elevation="0">
+                    <MudPaper Class="mud-theme-primary flex-grow-1 containerWord" MinWidth="48px" Height="48px"
+                              @onclick="@(()=>OnArrowKeyPressed("Enter"))">
+                        Enter
+                    </MudPaper>
+                    @foreach (var item in alphabet[2])
+                    {
+                        <MudPaper Class="mud-theme-primary flex-grow-1 containerWord" Height="48px"
+                                  @onclick="@(()=>OnArrowKeyPressed(item.ToString()))">
+                            @item.ToString().ToUpper()
+                        </MudPaper>
+                    }
+                    <MudPaper Class="mud-theme-primary flex-grow-1 containerWord" MinWidth="48px" Height="48px"
+                              @onclick="@(()=>OnArrowKeyPressed("Backspace"))">
+                        &lt;-
+                    </MudPaper>
+                </MudPaper>
+            </MudPaper>
+        </MudPaper>
+    </div>
+</div> 
+<style>
+    .container {
+        /* This ensures the container takes up the entire viewport */
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        /* Center content vertically */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #e5e9f4
+    }
+    .containerWord {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .custom-label-color .mud-input-label {
+        background-color: #e5e9f4 !important;
+    }  
+    .custom-expansion {
+        background-color: #ffffff4d;
+        border-radius:4px;
+    }
+
+</style>
