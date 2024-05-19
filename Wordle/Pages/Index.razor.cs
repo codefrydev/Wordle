@@ -1,19 +1,20 @@
 ﻿
-using Microsoft.AspNetCore.Components;
-using Microsoft.JSInterop;
-using Wordle.Shared;
+using Microsoft.AspNetCore.Components; 
+using Microsoft.JSInterop; 
+using Wordle.Model;
+using Wordle.Shared; 
 
 namespace Wordle.Pages
 {
     public partial class Index
     {
-        List<List<char>> list = [];
+        bool win = false;
+        List<List<Cell>> list = [];
         readonly Random random = new();
-        readonly string wordleListPath = "https://raw.githubusercontent.com/PrashantUnity/SomeCoolScripts/main/wordlewords.txt";
+        const string wordleListPath = "https://raw.githubusercontent.com/PrashantUnity/SomeCoolScripts/main/wordlewords.txt";
         private HashSet<string> hashOfWordData = [];
         private List<string> listOfWordData = [];
-        Stack<char> currentword = new();
-        int index = 0;
+        Stack<char> currentword = new(); 
         private readonly List<List<char>> alphabet =
         [
             [.. "qwertyuiop".ToCharArray()],
@@ -31,34 +32,50 @@ namespace Wordle.Pages
         [JSInvokable]
         public async Task OnArrowKeyPressed(string key)
         {
+            if (win) return;
             var stackToList = currentword.Reverse().ToList();
+            Console.WriteLine(Config.CurrentIndex);
+            if (key == "Enter")
+            {
+                Console.WriteLine($"Before Enter {string.Concat(stackToList)}");
+                Console.WriteLine($"Current Word {Config.WordToFind}");
+                if (currentword.Count >= 5 && ValidWord(string.Concat(stackToList)))
+                {
+                    if(string.Concat(stackToList)==Config.WordToFind)
+                    {
+                        Console.WriteLine("you win");
+                        OpenDialog();
+                        win = true;
+                    }
+                    Config.CurrentIndex++;
+                    currentword = new();
+                }
+                Console.WriteLine($"After Enter {string.Concat(stackToList)}");
+                StateHasChanged();
+                return;
+            }
             if (stackToList.Count > 0)
             {
-                Console.WriteLine("{0}", string.Concat(stackToList));
+                Console.WriteLine(string.Concat(stackToList));
             }
-            if (index >= list.Count)
+            if (Config.CurrentIndex >= list.Count)
             {
                 Console.WriteLine("Game Over");
+                return;
             }
             if (key == "Backspace")
             {
-                Console.WriteLine("Backspace");
+                Console.WriteLine(string.Concat(stackToList)); 
                 if (currentword.Count > 0)
                 {
+                    list[Config.CurrentIndex][currentword.Count - 1].PlaceHolder = ' ';
                     currentword.Pop();
                 }
-                MapStackToListWithEmpty(stackToList);
+                Console.WriteLine(string.Concat(currentword.Reverse().ToList())); 
+                StateHasChanged();
             }
-            else if (key == "Enter")
-            {
-                Console.WriteLine("Enter");
-                if (currentword.Count >= 5 && ValidWord(string.Concat(stackToList)))
-                {
-                    index++;
-                    currentword = new();
-                }
-            }
-            else if (key.Length == 1 && currentword.Count != 5)
+            
+            if (key.Length == 1 && currentword.Count < 5)
             {
                 Console.WriteLine("currentword.Count != 5");
                 var c = key.ToLower()[0];
@@ -66,50 +83,18 @@ namespace Wordle.Pages
                 {
                     Console.WriteLine($"{c} is pushed Into Stack");
                     currentword.Push(c);
-                    MapStackToList(stackToList);
+                    list[Config.CurrentIndex][currentword.Count-1].PlaceHolder = c; 
                 }
-            }
-            await Task.Delay(10);
+            } 
             StateHasChanged();
-        }
-        void MapStackToList(List<char> stackToList)
-        {
-            for (var i = 0; i < stackToList.Count; i++)
-            {
-                list[index][i] = stackToList[i];
-            }
-            StateHasChanged();
-        }
-        void MapStackToListWithEmpty(List<char> stackToList)
-        {
-            for (var i = 0; i < list[index].Count; i++)
-            {
-                if (i >= stackToList.Count)
-                {
-                    list[index][i] = ' ';
-                }
-                else
-                {
-                    list[index][i] = stackToList[i];
-                }
-            }
-            StateHasChanged();
-        }
+        } 
         protected override async Task OnInitializedAsync()
         {
-            index = 0;
-            list = [];
-            currentword = new();
-            for (int i = 0; i < Config.MaxAttempt; i++)
-            {
-                var ls = new List<char>();
-                for (var j = 0; j < 5; j++)
-                {
-                    ls.Add(' ');
-                }
-                list.Add(ls);
-            }
-
+            Config.CurrentIndex = 0;
+            win = false;
+            Config.Reset();
+            list = Config.List;
+            currentword = new();  
             using var client = new HttpClient();
             var content = await client.GetAsync(wordleListPath);
             if (content.IsSuccessStatusCode)
@@ -129,17 +114,10 @@ namespace Wordle.Pages
         }
         private void Reset()
         {
-            index = 0;
-            list = [];
-            for (int i = 0; i < Config.MaxAttempt; i++)
-            {
-                var ls = new List<char>();
-                for (var j = 0; j < 5; j++)
-                {
-                    ls.Add(' ');
-                }
-                list.Add(ls);
-            }
+            win = false;
+            Config.Reset();
+            list = Config.List;
+            currentword = new(); 
             GetRandomWords();
         }
     }

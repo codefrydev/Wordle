@@ -1,10 +1,14 @@
-﻿namespace Wordle.Shared
+﻿using Wordle.Model;
+
+namespace Wordle.Shared
 {
     public class Config
     {
         public static int MaxAttempt { get; set; } = 6;
+        public static int CurrentIndex { get; set; } = 0;
         public static int CurrentAttempt { get; set; } = 6;
-        public static string WordToFind { get; set; } = string.Empty;
+        public static string WordToFind { get; set; } = string.Empty;  
+        public static List<List<Cell>> List { get; private set; } = [];
 
         public static string GetBackGroundColor(char c, List<char> chars)
         {
@@ -18,17 +22,23 @@
             }
             return "grey";
         }
-        public static string GetTextColor(char c, List<char> chars)
+        public static void Reset()
         {
-            if (WordToFind.Contains(c))
+            List = [];
+            for (int i = 0; i < MaxAttempt; i++)
             {
-                if (WordToFind.IndexOf(c) == chars.IndexOf(c))
+                var ls = new List<Cell>();
+                for (var j = 0; j < 5; j++)
                 {
-                    return "white";
+                    ls.Add( new Cell
+                    {
+                        Col = j,
+                        Row =i,
+                        PlaceHolder =' '
+                    });
                 }
-                return "black";
-            }
-            return "blue";
+                List.Add(ls);
+            } 
         }
     }
 }
