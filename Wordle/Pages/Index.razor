@@ -1,7 +1,7 @@
 ﻿@page "/"  
 <div class="container" style="background-color:transparent">
     <div class="content" style="background-color:transparent"> 
-        <MudPaper Class="d-flex align-content-space-between flex-wrap flex-grow-1 gap-4" MaxWidth="608px" Height="95vh" Elevation="0" Style="background-color:transparent">
+        <MudPaper Class="d-flex align-content-space-between flex-wrap flex-grow-1 gap-4" MaxWidth="608px" Height="90vh" Elevation="0" Style="background-color:transparent">
             <MudPaper Width="100%" Height="32px" Elevation="0" Style="background-color:transparent" >
                 <MudIconButton Icon="@Icons.Material.Filled.QuestionMark" 
                 Color="Color.Warning" OnClick="HelpDialog" />
@@ -31,7 +31,7 @@
                     {
                         <MudPaper Class="flex-grow-1 containerWord" Height="48px"
                                   @onclick="@(()=>OnArrowKeyPressed(item.ToString()))"
-                                  Style="background-color:darkgray"> 
+                                  Style="@(hashOfCharacter.ContainsKey(item)?Config.GetKeyBoardColor(hashOfCharacter[item]):"background-color:darkgray")">
                             <MudText Typo="Typo.h5">
                                 <strong>@item.ToString().ToUpper() </strong>
                             </MudText>
@@ -43,8 +43,8 @@
                     @foreach (var item in alphabet[1])
                     {
                         <MudPaper Class="flex-grow-1 containerWord" Height="48px"
-                                  @onclick="@(()=>OnArrowKeyPressed(item.ToString()))" 
-                                  Style="background-color:darkgray"> 
+                                  @onclick="@(()=>OnArrowKeyPressed(item.ToString()))"
+                                  Style="@(hashOfCharacter.ContainsKey(item)?Config.GetKeyBoardColor(hashOfCharacter[item]):"background-color:darkgray;")">
                             <MudText Typo="Typo.h5">
                                 <strong>@item.ToString().ToUpper() </strong>
                             </MudText>
@@ -64,7 +64,7 @@
                     {
                         <MudPaper Class="flex-grow-1 containerWord" Height="48px"
                                   @onclick="@(()=>OnArrowKeyPressed(item.ToString()))"
-                                  Style="background-color:darkgray">
+                                  Style="@(hashOfCharacter.ContainsKey(item)?Config.GetKeyBoardColor(hashOfCharacter[item]):"background-color:darkgray")">
                             
                             <MudText Typo="Typo.h5">
                                 <strong>@item.ToString().ToUpper() </strong>

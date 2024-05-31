@@ -20,6 +20,7 @@ namespace Wordle.Pages
             [.. "asdfghjkl".ToCharArray()],
             [.. "zxcvbnm".ToCharArray()]
         ];
+        Dictionary<char,int> hashOfCharacter = new(); 
         [Inject] protected IJSRuntime JSRuntime { get; set; } = null!;
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
@@ -44,6 +45,19 @@ namespace Wordle.Pages
                         win = true;
                     }
                     Config.CurrentIndex++;
+                   
+                    // for decorating of keyboards
+                    foreach(var i in stackToList)
+                    {
+                        if(Config.WordToFind.Contains(i))
+                        {
+                            hashOfCharacter.TryAdd(i, 1);
+                        }
+                        else
+                        {
+                            hashOfCharacter.TryAdd(i, 0);
+                        }
+                    }
                     currentword = new();
                 } 
                 StateHasChanged();

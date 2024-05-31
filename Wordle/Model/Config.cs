@@ -8,6 +8,15 @@
         public static string WordToFind { get; set; } = string.Empty;
         public static List<List<Cell>> List { get; private set; } = [];
 
+        public static string GetKeyBoardColor(int i)
+        {
+            return i switch
+            {
+                0 => "background-color:red;color:white",
+                1 => "background-color:Green;color:white",
+                _ => "background-color:darkgray"
+            };
+        }
         public static string GetBackGroundColor(char c, List<char> chars)
         {
             if (WordToFind.Contains(c))
