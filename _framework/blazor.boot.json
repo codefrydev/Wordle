@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "Wordle",
   "resources": {
-    "hash": "sha256-aBLEgG+VYG7LmIu0w8DSHL9o65myJU9Mdl1LTK0N/P0=",
+    "hash": "sha256-D6exIViUOMSICKTjWyDhRLIb59EAiQHeylUWyz6ehTs=",
     "jsModuleNative": {
       "dotnet.native.8.0.6.suuomc2hr0.js": "sha256-YU6M9+jtDVnB8/wtrgIndOstzNh778Ls8g9XnbjorSk="
     },
@@ -54,7 +54,7 @@
       "System.Text.Encodings.Web.wasm": "sha256-4o2rdYqn28fSExbJwk6xMl9O0sSvL+Yd9iDQ8+UW0jg=",
       "System.Text.Json.wasm": "sha256-z+hrd+eaFs0HB2L7dLeJFdE0Ptm1umfjcSrstO5z34k=",
       "System.Text.RegularExpressions.wasm": "sha256-Si/Oe0wuIIpucJXCZtZ30tYFqKXZo25Rg7DUQv+ug4k=",
-      "Wordle.wasm": "sha256-wjeP5M8A8l6jfnD6dSdLPd3FcPt2jRgSykucheoozjM="
+      "Wordle.wasm": "sha256-enjx2WEchMl+aokWvk+Nc/Dd6jCx1q9ZXHiatzncBcc="
     }
   },
   "cacheBootResources": true,
