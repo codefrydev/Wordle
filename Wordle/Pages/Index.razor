@@ -1,4 +1,5 @@
 ﻿@page "/"  
+<Sliding/>
 <div class="container" style="background-color:transparent">
     <div class="content" style="background-color:transparent"> 
         <MudPaper Class="d-flex align-content-space-between flex-wrap flex-grow-1 gap-4" MaxWidth="608px" Height="90vh" Elevation="0" Style="background-color:transparent">
@@ -6,10 +7,11 @@
                 <MudIconButton Icon="@Icons.Material.Filled.QuestionMark" 
                 Color="Color.Warning" OnClick="HelpDialog" />
             </MudPaper>
-            <MudPaper Class="d-flex flex-column flex-grow-1 gap-1" Elevation="0" Width="100%"> 
+            <MudPaper Class="d-flex flex-column flex-grow-1 gap-1" Style="background-color:transparent" Elevation="0" Width="100%">
                 @foreach (var item in list)
                 {
-                    <MudPaper Class="d-flex flex-row justify-center flex-grow-1 gap-1" Elevation="0">
+                    <MudPaper Class="d-flex flex-row justify-center flex-grow-1 gap-1"
+                              Style="background-color:transparent" Elevation="0">
                         @foreach (var point in item)
                         {
                             <MudPaper 
@@ -25,8 +27,8 @@
                     </MudPaper>
                 } 
             </MudPaper>
-            <MudPaper Class="gap-1" Width="100%" Elevation="0" Style="color:transparent">
-                <MudPaper Class="d-flex justify-center flex-grow-1 gap-1 ma-1" Elevation="0">
+            <MudPaper Class="gap-1" Width="100%" Elevation="0" Style="background-color:transparent">
+                <MudPaper Class="d-flex justify-center flex-grow-1 gap-1 ma-1" Style="background-color:transparent" Elevation="0">
                     @foreach (var item in alphabet[0])
                     {
                         <MudPaper Class="flex-grow-1 containerWord" Height="48px"
@@ -38,8 +40,8 @@
                         </MudPaper>
                     } 
                 </MudPaper>
-                <MudPaper Class="d-flex justify-center flex-grow-1 gap-1 ma-1" Elevation="0">
-                    <MudPaper Class="flex-grow-1" Height="48px" Elevation="0" Style="color:transparent"/>
+                <MudPaper Class="d-flex justify-center flex-grow-1 gap-1 ma-1" Elevation="0" Style="background-color:transparent">
+                    <MudPaper Class="flex-grow-1" Height="48px" Elevation="0" Style="background-color:transparent" />
                     @foreach (var item in alphabet[1])
                     {
                         <MudPaper Class="flex-grow-1 containerWord" Height="48px"
@@ -50,9 +52,9 @@
                             </MudText>
                         </MudPaper>
                     }
-                    <MudPaper Class="flex-grow-1" Height="48px" Elevation="0" Style="color:transparent" />
+                    <MudPaper Class="flex-grow-1" Height="48px" Elevation="0" Style="background-color:transparent" />
                 </MudPaper>
-                <MudPaper Class="d-flex justify-center flex-grow-1 gap-1 ma-1" Elevation="0">
+                <MudPaper Class="d-flex justify-center flex-grow-1 gap-1 ma-1" Elevation="0" Style="background-color:transparent">
                     <MudPaper Class="flex-grow-1 containerWord" MinWidth="48px" Height="48px"
                               @onclick="@(()=>OnArrowKeyPressed("Enter"))"
                               Style="background-color:darkgray"> 
