@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "Wordle",
   "resources": {
-    "hash": "sha256-D6exIViUOMSICKTjWyDhRLIb59EAiQHeylUWyz6ehTs=",
+    "hash": "sha256-WSFZRRb6Ic6WjeazFhXe6I2lCXUo9RY+E+daYsgDkvg=",
     "jsModuleNative": {
       "dotnet.native.8.0.6.suuomc2hr0.js": "sha256-YU6M9+jtDVnB8/wtrgIndOstzNh778Ls8g9XnbjorSk="
     },
@@ -17,7 +17,7 @@
       "icudt_no_CJK.dat": "sha256-L7sV7NEYP37/Qr2FPCePo5cJqRgTXRwGHuwF5Q+0Nfs="
     },
     "assembly": {
-      "Microsoft.AspNetCore.Components.wasm": "sha256-rQKzrptwmgqBpckH0hAh42DxDvZ9ad1eh2ZXuZP6Aic=",
+      "Microsoft.AspNetCore.Components.wasm": "sha256-L/ZrguL9Kfmlky/RCkxPDNZe+lc2vtUaWWGJZRPUiUI=",
       "Microsoft.AspNetCore.Components.Web.wasm": "sha256-p4t7WI9gAQ3NY+RrunluKnmGdu9T4o/Yi+WxTw44fCU=",
       "Microsoft.AspNetCore.Components.WebAssembly.wasm": "sha256-mwwNz/IMHU35BqhBaez63Z01g22S/iPHUXLcAMuyQL4=",
       "Microsoft.Extensions.Configuration.Abstractions.wasm": "sha256-87sn2TYqgdZ95sXmavjKEzoEfMgHnYQ9LOvnMX+aZcI=",
@@ -54,7 +54,7 @@
       "System.Text.Encodings.Web.wasm": "sha256-4o2rdYqn28fSExbJwk6xMl9O0sSvL+Yd9iDQ8+UW0jg=",
       "System.Text.Json.wasm": "sha256-z+hrd+eaFs0HB2L7dLeJFdE0Ptm1umfjcSrstO5z34k=",
       "System.Text.RegularExpressions.wasm": "sha256-Si/Oe0wuIIpucJXCZtZ30tYFqKXZo25Rg7DUQv+ug4k=",
-      "Wordle.wasm": "sha256-enjx2WEchMl+aokWvk+Nc/Dd6jCx1q9ZXHiatzncBcc="
+      "Wordle.wasm": "sha256-ExNBogXRYVMvYPCnvI1/7KarBrdQ8BTlCihCx94J9KI="
     }
   },
   "cacheBootResources": true,
