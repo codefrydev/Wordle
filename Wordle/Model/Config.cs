@@ -46,6 +46,7 @@
                 }
                 List.Add(ls);
             }
+            CurrentIndex = 0;
         }
     }
 }

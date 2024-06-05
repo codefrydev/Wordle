@@ -1,0 +1,33 @@
+﻿<MudDialog>
+    <DialogContent>
+        <MudPaper Class="d-flex flex-row justify-center flex-grow-1 gap-1"
+                  Style="background-color:transparent" Elevation="0">
+
+            @foreach (var point in Config.WordToFind.ToUpper())
+            {
+                <MudPaper Class="containerWord"
+                          Width="64px"
+                          Height="64px"
+                          Style="@($"border-width:1px;border-radius:10px;border-color:black;background-color:blue;")">
+                    <MudText Typo="Typo.h4" Style="@($"color:white")">
+                        <strong>@point</strong>
+                    </MudText>
+                </MudPaper>
+            }
+        </MudPaper>
+    </DialogContent>
+    <DialogActions> 
+        <MudButton Color="Color.Primary" OnClick="Submit">Replay</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Inject]
+    public NavigationManager nav { get; set; } 
+    void Submit() {
+        MudDialog.Close(DialogResult.Ok(true));
+        nav.NavigateTo("",true);
+    } 
+}

@@ -6,8 +6,8 @@
             <MudPaper Width="100%" Height="32px" Elevation="0" Style="background-color:transparent" >
                 <MudIconButton Icon="@Icons.Material.Filled.QuestionMark" 
                 Color="Color.Warning" OnClick="HelpDialog" />
-            </MudPaper>
-            <MudPaper Class="d-flex flex-column flex-grow-1 gap-1" Style="background-color:transparent" Elevation="0" Width="100%">
+            </MudPaper> 
+            <MudPaper Class="d-flex flex-column flex-grow-1 gap-1" Style="background-color:transparent" Elevation="0" Width="100%"> 
                 @foreach (var item in list)
                 {
                     <MudPaper Class="d-flex flex-row justify-center flex-grow-1 gap-1"
@@ -138,7 +138,8 @@
     void Submit()
     {
         Reset();
-        visible = false; 
+        visible = false;
+        StateHasChanged();
     }
 
     private DialogOptions dialogOptions = new() 
@@ -153,6 +154,6 @@
             CloseOnEscapeKey = true,
             CloseButton = true
         };
-        DialogService.Show<HowToPlay>("HOW TO PLAY", options);
+        DialogService.Show<HowToPlay>("HOW TO PLAY", options); 
     }
 }

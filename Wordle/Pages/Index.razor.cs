@@ -1,12 +1,14 @@
 ﻿
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using MudBlazor;
 using Wordle.Model;
+using Wordle.Components;
 
 namespace Wordle.Pages
 {
     public partial class Index
-    {
+    { 
         bool win = false;
         List<List<Cell>> list = [];
         readonly Random random = new();
@@ -22,12 +24,33 @@ namespace Wordle.Pages
         ];
         Dictionary<char,int> hashOfCharacter = new(); 
         [Inject] protected IJSRuntime JSRuntime { get; set; } = null!;
+        private void Reset()
+        {
+            hashOfWordData = [];
+            listOfWordData = [];
+            hashOfCharacter = new();
+            currentword = new(); 
+            win = false;
+            Config.Reset();
+            list = Config.List;
+            GetRandomWords();
+            StateHasChanged();
+        }
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (firstRender)
             {
                 await JSRuntime.InvokeVoidAsync("blazorKeyPressed", DotNetObjectReference.Create(this));
             }
+        }
+        [Inject]
+        public NavigationManager nav { get; set; }
+        void Restart()
+        {
+            var options = new DialogOptions { CloseOnEscapeKey = true };
+            DialogService.Show<LostScreen>("CORRECT WORD", options);
+            Reset();
+            StateHasChanged();
         }
         [JSInvokable]
         public void OnArrowKeyPressed(string key)
@@ -57,9 +80,13 @@ namespace Wordle.Pages
                         {
                             hashOfCharacter.TryAdd(i, 0);
                         }
-                    }
+                    } 
                     currentword = new();
-                } 
+                }
+                if (Config.CurrentIndex >= list.Count)
+                {
+                    Restart();
+                }
                 StateHasChanged();
                 return;
             }
@@ -67,8 +94,8 @@ namespace Wordle.Pages
             { 
             }
             if (Config.CurrentIndex >= list.Count)
-            { 
-                return;
+            {
+                Restart();
             }
             if (key == "Backspace")
             { 
@@ -116,13 +143,6 @@ namespace Wordle.Pages
         {
             Config.WordToFind = listOfWordData[random.Next(listOfWordData.Count)];
         }
-        private void Reset()
-        {
-            win = false;
-            Config.Reset();
-            list = Config.List;
-            currentword = new(); 
-            GetRandomWords();
-        }
+       
     }
 }
