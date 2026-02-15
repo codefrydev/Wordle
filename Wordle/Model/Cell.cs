@@ -1,4 +1,4 @@
-﻿namespace Wordle.Model
+namespace Wordle.Model
 {
     public class Cell
     {
@@ -9,21 +9,22 @@
         public string PlaceHolderToString()=> PlaceHolder.ToString().ToUpper();
         public string GetBackGroundColor()
         {
-            if (PlaceHolder == ' ' || Config.CurrentIndex ==Row) return "white";
+            var dark = Config.Theme == "dark";
+            if (PlaceHolder == ' ' || Config.CurrentIndex == Row) return dark ? "#1a1915" : "#f5f0e6";
             if (Config.WordToFind.Contains(PlaceHolder))
             {
                 for (var i = 0; i < Config.WordToFind.Length; i++)
-                { 
-                    if (Config.WordToFind[i] == PlaceHolder && i==Col) return "green";
+                {
+                    if (Config.WordToFind[i] == PlaceHolder && i == Col) return "#4a7c59";
                 }
-                return "orange";
+                return "#c9a227";
             }
-            return "grey";
+            return dark ? "#3d3832" : "#5c5346";
         }
         public string GetTextColor()
         {
-            if (Config.CurrentIndex == Row) return "black"; 
-            return "white";
+            if (Config.CurrentIndex == Row) return Config.Theme == "dark" ? "#e8e0d0" : "#2c2420";
+            return "#ffffff";
         }
     }
 }

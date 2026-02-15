@@ -1,33 +1,22 @@
-﻿<MudDialog>
-    <DialogContent>
-        <MudPaper Class="d-flex flex-row justify-center flex-grow-1 gap-1"
-                  Style="background-color:transparent" Elevation="0">
-
-            @foreach (var point in Config.WordToFind.ToUpper())
-            {
-                <MudPaper Class="containerWord"
-                          Width="64px"
-                          Height="64px"
-                          Style="@($"border-width:1px;border-radius:10px;border-color:black;background-color:blue;")">
-                    <MudText Typo="Typo.h4" Style="@($"color:white")">
-                        <strong>@point</strong>
-                    </MudText>
-                </MudPaper>
-            }
-        </MudPaper>
-    </DialogContent>
-    <DialogActions> 
-        <MudButton Color="Color.Primary" OnClick="Submit">Replay</MudButton>
-    </DialogActions>
-</MudDialog>
+<div class="lost-tiles">
+    @foreach (var point in Config.WordToFind.ToUpper())
+    {
+        <div class="lost-tile" style="background-color: var(--correct);">
+            <span style="color: var(--correct-text);">@point</span>
+        </div>
+    }
+</div>
+<div class="flex justify-end gap-2 mt-4">
+    <button type="button" class="lost-btn py-2 px-6 rounded font-semibold" @onclick="Submit">Replay</button>
+</div>
 
 @code {
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
+    [Inject] public NavigationManager? Nav { get; set; }
 
-    [Inject]
-    public NavigationManager nav { get; set; } 
-    void Submit() {
-        MudDialog.Close(DialogResult.Ok(true));
-        nav.NavigateTo("",true);
-    } 
+    private async Task Submit()
+    {
+        await OnClose.InvokeAsync();
+        Nav?.NavigateTo("", true);
+    }
 }

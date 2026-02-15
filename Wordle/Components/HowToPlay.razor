@@ -1,182 +1,39 @@
-﻿<MudDialog>
-    <DialogContent>
-        <MudList>
-            <MudListItem>
-                <MudText>
-                    Guess the hidden word in 6 tries.
-                </MudText> 
-                <MudText>
-                    Each guess must be a valid 5 letter word, you cannot enter random letters. Hit the enter button to submit the guess.
-                </MudText> 
-                <MudText>
-                    After your submission, the color of the tiles will change as in the examples below.
-                </MudText>
-            </MudListItem>
-            <MudDivider />
-            <MudListItem>
-                <MudPaper Class="d-flex justify-start flex-grow-1 gap-4" Elevation="0">
-                    <MudPaper Class="containerWord"
-                              Width="64px"
-                              Height="64px"
-                              Style="border-width:1px;border-radius:10px;border-color:black;background-color:green">
-                        <MudText Typo="Typo.h4" Style="color:white">
-                            <strong>G</strong>
-                        </MudText>
-                    </MudPaper>
-                    <MudPaper Class="containerWord"
-                              Width="64px"
-                              Height="64px"
-                              Style="border-width:1px;border-radius:10px;border-color:black;background-color:white">
-                        <MudText Typo="Typo.h4" Style="color:black">
-                            <strong>A</strong>
-                        </MudText>
-                    </MudPaper>
-                    <MudPaper Class="containerWord"
-                              Width="64px"
-                              Height="64px"
-                              Style="border-width:1px;border-radius:10px;border-color:black;background-color:white">
-                        <MudText Typo="Typo.h4" Style="color:black">
-                            <strong>M</strong>
-                        </MudText>
-                    </MudPaper>
-                    <MudPaper Class="containerWord"
-                              Width="64px"
-                              Height="64px"
-                              Style="border-width:1px;border-radius:10px;border-color:black;background-color:white">
-                        <MudText Typo="Typo.h4" Style="color:black">
-                            <strong>E</strong>
-                        </MudText>
-                    </MudPaper>
-                    <MudPaper Class="containerWord"
-                              Width="64px"
-                              Height="64px"
-                              Style="border-width:1px;border-radius:10px;border-color:black;background-color:white">
-                        <MudText Typo="Typo.h4" Style="color:black">
-                            <strong>S</strong>
-                        </MudText>
-                    </MudPaper>
-                </MudPaper>
-            </MudListItem>
-            <MudListItem>
-                <MudText>
-                    The letter G is in the word and in the correct spot.
-                </MudText>
-            </MudListItem> 
-            <MudListItem>
-                <MudPaper Class="d-flex justify-start flex-grow-1 gap-4" Elevation="0">
-                    <MudPaper Class="containerWord"
-                              Width="64px"
-                              Height="64px"
-                              Style="border-width:1px;border-radius:10px;border-color:black;background-color:white">
-                        <MudText Typo="Typo.h4" Style="color:black">
-                            <strong>H</strong>
-                        </MudText>
-                    </MudPaper>
-                    <MudPaper Class="containerWord"
-                              Width="64px"
-                              Height="64px"
-                              Style="border-width:1px;border-radius:10px;border-color:black;background-color:orange">
-                        <MudText Typo="Typo.h4" Style="color:white">
-                            <strong>O</strong>
-                        </MudText>
-                    </MudPaper>
-                    <MudPaper Class="containerWord"
-                              Width="64px"
-                              Height="64px"
-                              Style="border-width:1px;border-radius:10px;border-color:black;background-color:white">
-                        <MudText Typo="Typo.h4" Style="color:black">
-                            <strong>T</strong>
-                        </MudText>
-                    </MudPaper>
-                    <MudPaper Class="containerWord"
-                              Width="64px"
-                              Height="64px"
-                              Style="border-width:1px;border-radius:10px;border-color:black;background-color:white">
-                        <MudText Typo="Typo.h4" Style="color:black">
-                            <strong>E</strong>
-                        </MudText>
-                    </MudPaper>
-                    <MudPaper Class="containerWord"
-                              Width="64px"
-                              Height="64px"
-                              Style="border-width:1px;border-radius:10px;border-color:black;background-color:white">
-                        <MudText Typo="Typo.h4" Style="color:black">
-                            <strong>L</strong>
-                        </MudText>
-                    </MudPaper>
-                </MudPaper>
-            </MudListItem>
-            <MudListItem>
-                <MudText>
-                    The letter <strong>O</strong> is in the word but in the wrong spot.
-                </MudText>
-            </MudListItem> 
-            
-            <MudListItem>
-                <MudPaper Class="d-flex justify-start flex-grow-1 gap-4" Elevation="0">
-                    <MudPaper Class="containerWord"
-                              Width="64px"
-                              Height="64px"
-                              Style="border-width:1px;border-radius:10px;border-color:black;background-color:grey">
-                        <MudText Typo="Typo.h4" Style="color:white">
-                            <strong>C</strong>
-                        </MudText>
-                    </MudPaper>
-                    <MudPaper Class="containerWord"
-                              Width="64px"
-                              Height="64px"
-                              Style="border-width:1px;border-radius:10px;border-color:black;background-color:white">
-                        <MudText Typo="Typo.h4" Style="color:black">
-                            <strong>L</strong>
-                        </MudText>
-                    </MudPaper>
-                    <MudPaper Class="containerWord"
-                              Width="64px"
-                              Height="64px"
-                              Style="border-width:1px;border-radius:10px;border-color:black;background-color:white">
-                        <MudText Typo="Typo.h4" Style="color:black">
-                            <strong>I</strong>
-                        </MudText>
-                    </MudPaper>
-                    <MudPaper Class="containerWord"
-                              Width="64px"
-                              Height="64px"
-                              Style="border-width:1px;border-radius:10px;border-color:black;background-color:grey">
-                        <MudText Typo="Typo.h4" Style="color:white">
-                            <strong>C</strong>
-                        </MudText>
-                    </MudPaper>
-                    <MudPaper Class="containerWord"
-                              Width="64px"
-                              Height="64px"
-                              Style="border-width:1px;border-radius:10px;border-color:black;background-color:white">
-                        <MudText Typo="Typo.h4" Style="color:black">
-                            <strong>K</strong>
-                        </MudText>
-                    </MudPaper>
-                </MudPaper>
-            </MudListItem>
-            <MudListItem>
-                <MudText>
-                    The letter <strong>C</strong> is not in the word in any spot.
-                </MudText>
-            </MudListItem>
-        </MudList>
-        <MudButton Color="Color.Primary" Variant=Variant.Filled OnClick="Submit" FullWidth=true>Close</MudButton>
-    </DialogContent>
-</MudDialog>
+<ul class="list-none space-y-4 p-0 m-0" style="color: var(--outline-dark);">
+    <li class="space-y-2">
+        <p>Guess the hidden word in 6 tries.</p>
+        <p>Each guess must be a valid 5 letter word. Hit the enter button to submit the guess.</p>
+        <p>After your submission, the color of the tiles will change as in the examples below.</p>
+    </li>
+    <li class="border-t my-2" style="border-color: var(--outline-dark);"></li>
+    <li class="flex justify-start flex-wrap gap-1">
+        <div class="wordle-example-tile" style="background-color: var(--correct); color: var(--correct-text);"><span>G</span></div>
+        <div class="wordle-example-tile" style="background-color: var(--bg-cream); color: var(--key-default-text);"><span>A</span></div>
+        <div class="wordle-example-tile" style="background-color: var(--bg-cream); color: var(--key-default-text);"><span>M</span></div>
+        <div class="wordle-example-tile" style="background-color: var(--bg-cream); color: var(--key-default-text);"><span>E</span></div>
+        <div class="wordle-example-tile" style="background-color: var(--bg-cream); color: var(--key-default-text);"><span>S</span></div>
+    </li>
+    <li><p>The letter <strong>G</strong> is in the word and in the correct spot.</p></li>
+    <li class="flex justify-start flex-wrap gap-1">
+        <div class="wordle-example-tile" style="background-color: var(--bg-cream); color: var(--key-default-text);"><span>H</span></div>
+        <div class="wordle-example-tile" style="background-color: var(--wrong-spot); color: var(--wrong-spot-text);"><span>O</span></div>
+        <div class="wordle-example-tile" style="background-color: var(--bg-cream); color: var(--key-default-text);"><span>T</span></div>
+        <div class="wordle-example-tile" style="background-color: var(--bg-cream); color: var(--key-default-text);"><span>E</span></div>
+        <div class="wordle-example-tile" style="background-color: var(--bg-cream); color: var(--key-default-text);"><span>L</span></div>
+    </li>
+    <li><p>The letter <strong>O</strong> is in the word but in the wrong spot.</p></li>
+    <li class="flex justify-start flex-wrap gap-1">
+        <div class="wordle-example-tile" style="background-color: var(--absent); color: var(--absent-text);"><span>C</span></div>
+        <div class="wordle-example-tile" style="background-color: var(--bg-cream); color: var(--key-default-text);"><span>L</span></div>
+        <div class="wordle-example-tile" style="background-color: var(--bg-cream); color: var(--key-default-text);"><span>I</span></div>
+        <div class="wordle-example-tile" style="background-color: var(--absent); color: var(--absent-text);"><span>C</span></div>
+        <div class="wordle-example-tile" style="background-color: var(--bg-cream); color: var(--key-default-text);"><span>K</span></div>
+    </li>
+    <li><p>The letter <strong>C</strong> is not in the word in any spot.</p></li>
+</ul>
+<button type="button" class="w-full mt-4 wordle-btn-primary py-2 px-4 rounded font-semibold" @onclick="Submit">Close</button>
 
 @code {
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
 
-    void Submit() => MudDialog.Close(DialogResult.Ok(true));
-    void Cancel() => MudDialog.Cancel();
+    private async Task Submit() => await OnClose.InvokeAsync();
 }
-
-<style>
-    .containerWord {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-</style>

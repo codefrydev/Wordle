@@ -1,34 +1,25 @@
-﻿namespace Wordle.Model
+namespace Wordle.Model
 {
     public class Config
     {
         public static int MaxAttempt { get; set; } = 6;
         public static int CurrentIndex { get; set; } = 0;
-        public static int CurrentAttempt { get; set; } = 6;
         public static string WordToFind { get; set; } = string.Empty;
         public static List<List<Cell>> List { get; private set; } = [];
+        public static string Theme { get; set; } = "light";
 
         public static string GetKeyBoardColor(int i)
         {
+            var dark = Theme == "dark";
             return i switch
             {
-                0 => "background-color:red;color:white",
-                1 => "background-color:Green;color:white",
-                _ => "background-color:darkgray"
+                0 => "background-color:#5c5346;color:#ffffff",   /* absent - same both */
+                1 => "background-color:#c9a227;color:#ffffff",  /* present, wrong spot */
+                2 => "background-color:#4a7c59;color:#ffffff",  /* correct */
+                _ => dark ? "background-color:#2d2a26;color:#e8e0d0" : "background-color:#e8e0d0;color:#2c2420"   /* default */
             };
         }
-        public static string GetBackGroundColor(char c, List<char> chars)
-        {
-            if (WordToFind.Contains(c))
-            {
-                if (WordToFind.IndexOf(c) == chars.IndexOf(c))
-                {
-                    return "green";
-                }
-                return "orange";
-            }
-            return "grey";
-        }
+
         public static void Reset()
         {
             List = [];
