@@ -23,6 +23,10 @@
             var t = localStorage.getItem('wordle-theme');
             if (t === 'dark' || t === 'light') document.documentElement.setAttribute('data-theme', t);
             else document.documentElement.setAttribute('data-theme', 'light');
+            var p = localStorage.getItem('wordle-palette');
+            if (p && ['highcontrast', 'retro', 'neon'].indexOf(p) >= 0) document.documentElement.setAttribute('data-palette', p);
+            var r = localStorage.getItem('wordle-reduce-motion');
+            if (r === 'true') document.documentElement.setAttribute('data-reduce-motion', 'true');
         })();
     </script>
 </head>
@@ -31,16 +35,13 @@
     <div id="app">
         <div class="loading">
             <div class="loadinBaba">
-                <img src="loading.svg" height="200" width="200" />
+                <div class="wordle-loader" aria-hidden="true">
+                    <span class="wordle-loader-letter">W</span><span class="wordle-loader-letter">O</span><span class="wordle-loader-letter">R</span><span class="wordle-loader-letter">D</span><span class="wordle-loader-letter">L</span><span class="wordle-loader-letter">E</span>
+                </div>
             </div>
         </div>
     </div>
 
-    <div id="blazor-error-ui">
-        An unhandled error has occurred.
-        <a href="" class="reload">Reload</a>
-        <a class="dismiss">🗙</a>
-    </div>
     <script src="_framework/blazor.webassembly.js"></script>
     <script src="blazorkeypress.js"></script>
     <script src="wordle.js"></script>
