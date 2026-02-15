@@ -1,7 +1,7 @@
 @if (IsOpen)
 {
     <div class="modal-overlay" @onclick="OnBackdropClick">
-        <div class="absolute inset-0 bg-black/50" aria-hidden="true"></div>
+        <div class="modal-backdrop" aria-hidden="true"></div>
         <div class="modal-panel" @onclick:stopPropagation="true">
             @if (!string.IsNullOrEmpty(Title))
             {

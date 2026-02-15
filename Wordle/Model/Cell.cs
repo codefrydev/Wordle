@@ -26,5 +26,15 @@ namespace Wordle.Model
             if (Config.CurrentIndex == Row) return Config.Theme == "dark" ? "#e8e0d0" : "#2c2420";
             return "#ffffff";
         }
+
+        /// <summary>Returns CSS class for revealed tile state so palette variables apply; empty when empty or current row.</summary>
+        public string GetStateClass()
+        {
+            if (PlaceHolder == ' ' || Config.CurrentIndex == Row) return "";
+            var word = Config.WordToFind;
+            if (word[Col] == PlaceHolder) return "wordle-tile-state-correct";
+            if (word.Contains(PlaceHolder)) return "wordle-tile-state-present";
+            return "wordle-tile-state-absent";
+        }
     }
 }

@@ -7,8 +7,10 @@ using Wordle.Components;
 
 namespace Wordle.Pages
 {
-    public partial class Index
+    public partial class Index : IDisposable
     {
+        private Timer? _countdownTimer;
+        private bool _modalJustOpened;
         bool win = false;
         List<List<Cell>> list = [];
         readonly Random random = new();
@@ -27,6 +29,7 @@ namespace Wordle.Pages
         private bool showHowToPlayModal;
         private bool showStatsModal;
         private bool showWinModal;
+        private bool showSettingsModal;
         private int? winGuessCount;
         private int? lastSubmittedRow;
         private int? triggerShakeRow;
@@ -35,6 +38,13 @@ namespace Wordle.Pages
         private string? shareMessage;
         private bool shareCopied;
         private string theme = "light";
+        private string palette = "default";
+        private bool isHardMode;
+        private bool soundOn;
+        private bool hapticsOn;
+        private bool reduceMotion;
+        private string nextWordIn = "";
+        private string announcementText = "";
 
         [Inject] protected IJSRuntime JSRuntime { get; set; } = null!;
 
@@ -61,8 +71,30 @@ namespace Wordle.Pages
             if (firstRender)
             {
                 await JSRuntime.InvokeVoidAsync("blazorKeyPressed", DotNetObjectReference.Create(this));
+                if (isDailyMode)
+                {
+                    await RefreshNextWordInAsync();
+                    _countdownTimer = new Timer(_ => _ = InvokeAsync(RefreshNextWordInAsync), null, TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1));
+                }
+            }
+            if (_modalJustOpened && (showSettingsModal || showStatsModal || showHowToPlayModal || showWinModal || showLostModal))
+            {
+                _modalJustOpened = false;
+                try { await JSRuntime.InvokeVoidAsync("wordleTrapFocus"); } catch { }
             }
         }
+
+        private async Task RefreshNextWordInAsync()
+        {
+            try
+            {
+                nextWordIn = await JSRuntime.InvokeAsync<string>("getWordleNextWordIn") ?? "";
+            }
+            catch { nextWordIn = ""; }
+            await InvokeAsync(StateHasChanged);
+        }
+
+        public void Dispose() => _countdownTimer?.Dispose();
 
         private async Task ToggleThemeAsync()
         {
@@ -81,28 +113,111 @@ namespace Wordle.Pages
             StateHasChanged();
         }
 
-        void CloseLostModal()
+        async Task CloseLostModal()
         {
+            try { await JSRuntime.InvokeVoidAsync("wordleRestoreFocus"); } catch { }
             showLostModal = false;
             StateHasChanged();
         }
 
-        void HelpDialog()
+        async Task HelpDialog()
         {
+            try { await JSRuntime.InvokeVoidAsync("wordleSaveFocus"); } catch { }
             showHowToPlayModal = true;
+            _modalJustOpened = true;
             StateHasChanged();
         }
 
         private async Task OpenStatsModalAsync()
         {
+            try { await JSRuntime.InvokeVoidAsync("wordleSaveFocus"); } catch { }
             await LoadStatsAsync();
             showStatsModal = true;
+            _modalJustOpened = true;
             StateHasChanged();
         }
 
-        private void CloseStatsModal()
+        private async Task CloseStatsModal()
         {
+            try { await JSRuntime.InvokeVoidAsync("wordleRestoreFocus"); } catch { }
             showStatsModal = false;
+            StateHasChanged();
+        }
+
+        private async Task OpenSettingsModalAsync()
+        {
+            try { await JSRuntime.InvokeVoidAsync("wordleSaveFocus"); } catch { }
+            await LoadSettingsFromJsAsync();
+            showSettingsModal = true;
+            _modalJustOpened = true;
+            StateHasChanged();
+        }
+
+        private async Task CloseSettingsModal()
+        {
+            try { await JSRuntime.InvokeVoidAsync("wordleRestoreFocus"); } catch { }
+            showSettingsModal = false;
+            StateHasChanged();
+        }
+
+        private async Task LoadSettingsFromJsAsync()
+        {
+            try
+            {
+                theme = await JSRuntime.InvokeAsync<string>("getWordleTheme") ?? "light";
+                palette = await JSRuntime.InvokeAsync<string>("getWordlePalette") ?? "default";
+                isHardMode = await JSRuntime.InvokeAsync<bool>("getWordleHardMode");
+                soundOn = await JSRuntime.InvokeAsync<bool>("getWordleSound");
+                hapticsOn = await JSRuntime.InvokeAsync<bool>("getWordleHaptics");
+                reduceMotion = await JSRuntime.InvokeAsync<bool>("getWordleReduceMotion");
+                Config.Theme = theme;
+            }
+            catch { }
+        }
+
+        private async Task RefreshThemeAsync()
+        {
+            try
+            {
+                theme = await JSRuntime.InvokeAsync<string>("getWordleTheme") ?? "light";
+                Config.Theme = theme;
+            }
+            catch { }
+            StateHasChanged();
+        }
+
+        private async Task RefreshPaletteAsync()
+        {
+            try { palette = await JSRuntime.InvokeAsync<string>("getWordlePalette") ?? "default"; }
+            catch { }
+            StateHasChanged();
+        }
+
+        private async Task RefreshHardModeAsync()
+        {
+            try { isHardMode = await JSRuntime.InvokeAsync<bool>("getWordleHardMode"); }
+            catch { }
+            StateHasChanged();
+        }
+
+        private async Task RefreshSoundAsync()
+        {
+            try { soundOn = await JSRuntime.InvokeAsync<bool>("getWordleSound"); }
+            catch { }
+            StateHasChanged();
+        }
+
+        private async Task RefreshHapticsAsync()
+        {
+            try { hapticsOn = await JSRuntime.InvokeAsync<bool>("getWordleHaptics"); }
+            catch { }
+            StateHasChanged();
+        }
+
+        private async Task RefreshReduceMotionAsync()
+        {
+            try { reduceMotion = await JSRuntime.InvokeAsync<bool>("getWordleReduceMotion"); }
+            catch { }
             StateHasChanged();
         }
 
@@ -220,6 +335,18 @@ namespace Wordle.Pages
             try
             {
                 await JSRuntime.InvokeVoidAsync("wordleConfetti");
+                await JSRuntime.InvokeVoidAsync("wordlePlaySound", "win");
+                await JSRuntime.InvokeVoidAsync("wordleVibrate");
+            }
+            catch { }
+        }
+
+        private async Task PlaySoundAndHapticsAsync(string kind)
+        {
+            try
+            {
+                await JSRuntime.InvokeVoidAsync("wordlePlaySound", kind);
+                await JSRuntime.InvokeVoidAsync("wordleVibrate");
             }
             catch { }
         }
@@ -237,34 +364,55 @@ namespace Wordle.Pages
             var stackToList = currentword.Reverse().ToList();
             if (key == "Enter")
             {
-                if (currentword.Count >= 5 && ValidWord(string.Concat(stackToList)))
+                if (currentword.Count >= 5)
                 {
+                    var guess = string.Concat(stackToList);
+                    if (isHardMode && !SatisfiesHardMode(guess))
+                    {
+                        triggerShakeRow = Config.CurrentIndex;
+                        _ = PlaySoundAndHapticsAsync("invalid");
+                        StateHasChanged();
+                        _ = Task.Delay(450).ContinueWith(_ => InvokeAsync(() => { triggerShakeRow = null; StateHasChanged(); }));
+                        return;
+                    }
+                    if (ValidWord(guess))
+                    {
+                    _ = PlaySoundAndHapticsAsync("submit");
                     var submittedRow = Config.CurrentIndex;
+                    var word = Config.WordToFind;
+                    int correct = 0, present = 0, absent = 0;
+                    for (var col = 0; col < stackToList.Count; col++)
+                    {
+                        var letter = stackToList[col];
+                        int state = word[col] == letter ? 2 : (word.Contains(letter) ? 1 : 0);
+                        if (state == 2) correct++;
+                        else if (state == 1) present++;
+                        else absent++;
+                        if (!hashOfCharacter.TryGetValue(letter, out var existing) || state > existing)
+                            hashOfCharacter[letter] = state;
+                    }
                     if (string.Concat(stackToList) == Config.WordToFind)
                     {
                         win = true;
                         winGuessCount = submittedRow + 1;
                         shareMessage = BuildShareMessage(submittedRow + 1);
+                        announcementText = "Correct word!";
                         _ = RecordWinAsync(winGuessCount.Value);
                         _ = FireConfettiAsync();
                         showWinModal = true;
                     }
+                    else
+                        announcementText = $"Row {submittedRow + 1}: {correct} correct, {present} wrong spot, {absent} absent.";
                     Config.CurrentIndex++;
-                    var word = Config.WordToFind;
-                    for (var col = 0; col < stackToList.Count; col++)
-                    {
-                        var letter = stackToList[col];
-                        int state = word[col] == letter ? 2 : (word.Contains(letter) ? 1 : 0);
-                        if (!hashOfCharacter.TryGetValue(letter, out var existing) || state > existing)
-                            hashOfCharacter[letter] = state;
-                    }
                     currentword = new();
                     lastSubmittedRow = submittedRow;
                     StateHasChanged();
+                    }
                 }
                 else if (currentword.Count >= 5)
                 {
                     triggerShakeRow = Config.CurrentIndex;
+                    _ = PlaySoundAndHapticsAsync("invalid");
                     StateHasChanged();
                     _ = Task.Delay(450).ContinueWith(_ => InvokeAsync(() => { triggerShakeRow = null; StateHasChanged(); }));
                 }
@@ -292,6 +440,7 @@ namespace Wordle.Pages
                 {
                     currentword.Push(c);
                     list[Config.CurrentIndex][currentword.Count - 1].PlaceHolder = c;
+                    _ = PlaySoundAndHapticsAsync("key");
                 }
             }
             StateHasChanged();
@@ -327,7 +476,12 @@ namespace Wordle.Pages
             currentword = new();
             try
             {
-                theme = await JSRuntime.InvokeAsync<string>("getWordleTheme");
+                theme = await JSRuntime.InvokeAsync<string>("getWordleTheme") ?? "light";
+                palette = await JSRuntime.InvokeAsync<string>("getWordlePalette") ?? "default";
+                isHardMode = await JSRuntime.InvokeAsync<bool>("getWordleHardMode");
+                soundOn = await JSRuntime.InvokeAsync<bool>("getWordleSound");
+                hapticsOn = await JSRuntime.InvokeAsync<bool>("getWordleHaptics");
+                reduceMotion = await JSRuntime.InvokeAsync<bool>("getWordleReduceMotion");
                 Config.Theme = theme;
             }
             catch { }
@@ -344,6 +498,14 @@ namespace Wordle.Pages
 
         private bool ValidWord(string word) => hashOfWordData.Contains(word);
 
+        private bool SatisfiesHardMode(string guess)
+        {
+            foreach (var kv in hashOfCharacter)
+                if ((kv.Value == 1 || kv.Value == 2) && !guess.Contains(kv.Key))
+                    return false;
+            return true;
+        }
+
         private void GetRandomWords()
         {
             if (listOfWordData.Count == 0) return;
@@ -359,9 +521,18 @@ namespace Wordle.Pages
             }
         }
 
-        private void ToggleDailyMode(ChangeEventArgs e)
+        private async void ToggleDailyMode(ChangeEventArgs e)
         {
             isDailyMode = e.Value as bool? ?? false;
+            _countdownTimer?.Dispose();
+            _countdownTimer = null;
+            if (isDailyMode)
+            {
+                await RefreshNextWordInAsync();
+                _countdownTimer = new Timer(_ => _ = InvokeAsync(RefreshNextWordInAsync), null, TimeSpan.FromMinutes(1), TimeSpan.FromMinutes(1));
+            }
+            else
+                nextWordIn = "";
             Reset();
         }
 

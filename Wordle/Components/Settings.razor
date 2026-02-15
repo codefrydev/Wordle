@@ -1,0 +1,123 @@
+@namespace Wordle.Components
+
+<div class="settings-content" style="color: var(--outline-dark);">
+    <div class="settings-group">
+        <p class="settings-label">Theme</p>
+        <div class="settings-row">
+            <label class="settings-option">
+                <input type="radio" name="theme" checked="@(Theme == "light")" @onchange="@(() => SetTheme("light"))" />
+                <span>Light</span>
+            </label>
+            <label class="settings-option">
+                <input type="radio" name="theme" checked="@(Theme == "dark")" @onchange="@(() => SetTheme("dark"))" />
+                <span>Dark</span>
+            </label>
+        </div>
+    </div>
+    <div class="settings-group">
+        <p class="settings-label">Color palette</p>
+        <div class="settings-row settings-row-wrap">
+            <label class="settings-option">
+                <input type="radio" name="palette" checked="@(Palette == "default")" @onchange="@(() => SetPalette("default"))" />
+                <span>Default</span>
+            </label>
+            <label class="settings-option">
+                <input type="radio" name="palette" checked="@(Palette == "highcontrast")" @onchange="@(() => SetPalette("highcontrast"))" />
+                <span>High contrast</span>
+            </label>
+            <label class="settings-option">
+                <input type="radio" name="palette" checked="@(Palette == "retro")" @onchange="@(() => SetPalette("retro"))" />
+                <span>Retro</span>
+            </label>
+            <label class="settings-option">
+                <input type="radio" name="palette" checked="@(Palette == "neon")" @onchange="@(() => SetPalette("neon"))" />
+                <span>Neon</span>
+            </label>
+        </div>
+    </div>
+    <div class="settings-group">
+        <label class="settings-toggle">
+            <input type="checkbox" checked="@HardMode" @onchange="@(e => PersistHardMode(e))" />
+            <span>Hard mode (use revealed letters)</span>
+        </label>
+    </div>
+    <div class="settings-group">
+        <label class="settings-toggle">
+            <input type="checkbox" checked="@SoundOn" @onchange="@(e => PersistSound(e))" />
+            <span>Sound effects</span>
+        </label>
+    </div>
+    <div class="settings-group">
+        <label class="settings-toggle">
+            <input type="checkbox" checked="@HapticsOn" @onchange="@(e => PersistHaptics(e))" />
+            <span>Haptic feedback</span>
+        </label>
+    </div>
+    <div class="settings-group">
+        <label class="settings-toggle">
+            <input type="checkbox" checked="@ReduceMotion" @onchange="@(e => PersistReduceMotion(e))" />
+            <span>Reduce motion</span>
+        </label>
+    </div>
+    <button type="button" class="wordle-btn-primary w-full mt-4 py-2 px-4 rounded font-semibold" @onclick="Close">Close</button>
+</div>
+
+@code {
+    [Parameter] public string Theme { get; set; } = "light";
+    [Parameter] public string Palette { get; set; } = "default";
+    [Parameter] public bool HardMode { get; set; }
+    [Parameter] public bool SoundOn { get; set; }
+    [Parameter] public bool HapticsOn { get; set; }
+    [Parameter] public bool ReduceMotion { get; set; }
+    [Parameter] public EventCallback OnClose { get; set; }
+    [Parameter] public EventCallback OnThemeChange { get; set; }
+    [Parameter] public EventCallback OnPaletteChange { get; set; }
+    [Parameter] public EventCallback OnHardModeChange { get; set; }
+    [Parameter] public EventCallback OnSoundChange { get; set; }
+    [Parameter] public EventCallback OnHapticsChange { get; set; }
+    [Parameter] public EventCallback OnReduceMotionChange { get; set; }
+
+    [Inject] private IJSRuntime JSRuntime { get; set; } = null!;
+
+    private async Task SetTheme(string theme)
+    {
+        await JSRuntime.InvokeVoidAsync("setWordleTheme", theme);
+        await OnThemeChange.InvokeAsync();
+    }
+
+    private async Task SetPalette(string palette)
+    {
+        await JSRuntime.InvokeVoidAsync("setWordlePalette", palette);
+        await OnPaletteChange.InvokeAsync();
+    }
+
+    private async Task PersistHardMode(ChangeEventArgs e)
+    {
+        var v = (e.Value as bool?) ?? false;
+        await JSRuntime.InvokeVoidAsync("setWordleHardMode", v);
+        await OnHardModeChange.InvokeAsync();
+    }
+
+    private async Task PersistSound(ChangeEventArgs e)
+    {
+        var v = (e.Value as bool?) ?? false;
+        await JSRuntime.InvokeVoidAsync("setWordleSound", v);
+        await OnSoundChange.InvokeAsync();
+    }
+
+    private async Task PersistHaptics(ChangeEventArgs e)
+    {
+        var v = (e.Value as bool?) ?? false;
+        await JSRuntime.InvokeVoidAsync("setWordleHaptics", v);
+        await OnHapticsChange.InvokeAsync();
+    }
+
+    private async Task PersistReduceMotion(ChangeEventArgs e)
+    {
+        var v = (e.Value as bool?) ?? false;
+        await JSRuntime.InvokeVoidAsync("setWordleReduceMotion", v);
+        await OnReduceMotionChange.InvokeAsync();
+    }
+
+    private async Task Close() => await OnClose.InvokeAsync();
+}

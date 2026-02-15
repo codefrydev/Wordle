@@ -20,6 +20,12 @@ namespace Wordle.Model
             };
         }
 
+        /// <summary>Returns CSS class for key state so palette variables apply; empty for default.</summary>
+        public static string GetKeyBoardClass(int i)
+        {
+            return i switch { 0 => "wordle-key-absent", 1 => "wordle-key-present", 2 => "wordle-key-correct", _ => "" };
+        }
+
         public static void Reset()
         {
             List = [];

@@ -1,16 +1,26 @@
 @page "/"
 <Sliding />
 <div class="wordle-app">
-    <header class="wordle-header">
+    <div id="wordle-announcer" class="wordle-sr-only" aria-live="polite" aria-atomic="true">@announcementText</div>
+    <header class="wordle-header @(isDailyMode && !string.IsNullOrEmpty(nextWordIn) ? "wordle-header-with-countdown" : "")">
         <h1 class="wordle-title">WORDLE</h1>
+        @if (isDailyMode && !string.IsNullOrEmpty(nextWordIn))
+        {
+            <p class="wordle-next-word-in" aria-live="polite">Next word in @nextWordIn</p>
+        }
         <div class="wordle-header-actions">
             <label class="wordle-daily-toggle" title="Daily word (same word for everyone today)">
                 <input type="checkbox" checked="@isDailyMode" @onchange="@(e => ToggleDailyMode(e))" />
                 <span>Daily</span>
             </label>
+            @if (isHardMode)
+            {
+                <span class="wordle-hard-badge" title="Hard mode: use revealed letters">Hard</span>
+            }
             <button type="button" class="wordle-icon-btn" aria-label="@(theme == "dark" ? "Switch to light mode" : "Switch to dark mode")" @onclick="ToggleThemeAsync" title="@(theme == "dark" ? "Light mode" : "Dark mode")">@(theme == "dark" ? "☀️" : "🌙")</button>
             <button type="button" class="wordle-icon-btn" aria-label="Statistics" @onclick="OpenStatsModalAsync">📊</button>
             <button type="button" class="wordle-icon-btn" aria-label="How to play" @onclick="HelpDialog">?</button>
+            <button type="button" class="wordle-icon-btn" aria-label="Settings" @onclick="OpenSettingsModalAsync">⚙️</button>
         </div>
     </header>
     <main class="wordle-main">
@@ -22,8 +32,8 @@
                     @for (var colIndex = 0; colIndex < row.Count; colIndex++)
                     {
                         var point = row[colIndex];
-                        <div class="@TileCssClass(rowIndex, colIndex)" style="background-color:@point.GetBackGroundColor(); border-color:@(point.PlaceHolder == ' ' || Config.CurrentIndex == point.Row ? BorderColor : "transparent");">
-                            <span class="wordle-tile-letter" style="color:@point.GetTextColor();">@point.PlaceHolderToString()</span>
+                        <div class="@TileCssClass(rowIndex, colIndex) @point.GetStateClass()" style="@(string.IsNullOrEmpty(point.GetStateClass()) ? "background-color:" + point.GetBackGroundColor() + "; color:" + point.GetTextColor() + "; " : "")border-color:@(point.PlaceHolder == ' ' || Config.CurrentIndex == point.Row ? BorderColor : "transparent");">
+                            <span class="wordle-tile-letter" style="@(string.IsNullOrEmpty(point.GetStateClass()) ? "color:" + point.GetTextColor() : "");">@point.PlaceHolderToString()</span>
                         </div>
                     }
                 </div>
@@ -33,14 +43,16 @@
             <div class="wordle-keyrow">
                 @foreach (var item in alphabet[0])
                 {
-                    <button type="button" class="wordle-key" style="@(hashOfCharacter.ContainsKey(item) ? Config.GetKeyBoardColor(hashOfCharacter[item]) : KeyStyleDefault)" @onclick='() => OnArrowKeyPressed(item.ToString())'>@item.ToString().ToUpper()</button>
+                    var keyClass = hashOfCharacter.ContainsKey(item) ? Config.GetKeyBoardClass(hashOfCharacter[item]) : "";
+                    <button type="button" class="wordle-key @keyClass" style="@(string.IsNullOrEmpty(keyClass) ? KeyStyleDefault : "")" @onclick='() => OnArrowKeyPressed(item.ToString())'>@item.ToString().ToUpper()</button>
                 }
             </div>
             <div class="wordle-keyrow">
                 <div class="wordle-key-spacer"></div>
                 @foreach (var item in alphabet[1])
                 {
-                    <button type="button" class="wordle-key" style="@(hashOfCharacter.ContainsKey(item) ? Config.GetKeyBoardColor(hashOfCharacter[item]) : KeyStyleDefault)" @onclick='() => OnArrowKeyPressed(item.ToString())'>@item.ToString().ToUpper()</button>
+                    var keyClass1 = hashOfCharacter.ContainsKey(item) ? Config.GetKeyBoardClass(hashOfCharacter[item]) : "";
+                    <button type="button" class="wordle-key @keyClass1" style="@(string.IsNullOrEmpty(keyClass1) ? KeyStyleDefault : "")" @onclick='() => OnArrowKeyPressed(item.ToString())'>@item.ToString().ToUpper()</button>
                 }
                 <div class="wordle-key-spacer"></div>
             </div>
@@ -48,7 +60,8 @@
                 <button type="button" class="wordle-key wordle-key-wide" style="@KeyStyleDefault" @onclick='() => OnArrowKeyPressed("Enter")'>ENTER</button>
                 @foreach (var item in alphabet[2])
                 {
-                    <button type="button" class="wordle-key" style="@(hashOfCharacter.ContainsKey(item) ? Config.GetKeyBoardColor(hashOfCharacter[item]) : KeyStyleDefault)" @onclick='() => OnArrowKeyPressed(item.ToString())'>@item.ToString().ToUpper()</button>
+                    var keyClass2 = hashOfCharacter.ContainsKey(item) ? Config.GetKeyBoardClass(hashOfCharacter[item]) : "";
+                    <button type="button" class="wordle-key @keyClass2" style="@(string.IsNullOrEmpty(keyClass2) ? KeyStyleDefault : "")" @onclick='() => OnArrowKeyPressed(item.ToString())'>@item.ToString().ToUpper()</button>
                 }
                 <button type="button" class="wordle-key wordle-key-wide" style="@KeyStyleDefault" @onclick='() => OnArrowKeyPressed("Backspace")'>⌫</button>
             </div>
@@ -84,6 +97,14 @@
     </Modal>
 }
 
+@if (showSettingsModal)
+{
+    <Modal IsOpen="true" Title="SETTINGS" OnClose="CloseSettingsModal">
+        <Settings Theme="@theme" Palette="@palette" HardMode="@isHardMode" SoundOn="@soundOn" HapticsOn="@hapticsOn" ReduceMotion="@reduceMotion"
+                  OnClose="CloseSettingsModal" OnThemeChange="RefreshThemeAsync" OnPaletteChange="RefreshPaletteAsync"
+                  OnHardModeChange="RefreshHardModeAsync" OnSoundChange="RefreshSoundAsync" OnHapticsChange="RefreshHapticsAsync" OnReduceMotionChange="RefreshReduceMotionAsync" />
+    </Modal>
+}
 @if (showStatsModal)
 {
     <Modal IsOpen="true" Title="STATS" OnClose="CloseStatsModal">
@@ -127,14 +148,16 @@
 }
 
 @code {
-    private void CloseHowToPlayModal()
+    private async Task CloseHowToPlayModal()
     {
+        try { await JSRuntime.InvokeVoidAsync("wordleRestoreFocus"); } catch { }
         showHowToPlayModal = false;
         StateHasChanged();
     }
 
-    private void CloseWinModal()
+    private async Task CloseWinModal()
     {
+        try { await JSRuntime.InvokeVoidAsync("wordleRestoreFocus"); } catch { }
         showWinModal = false;
         StateHasChanged();
     }
